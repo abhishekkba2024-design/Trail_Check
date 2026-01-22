@@ -46,7 +46,7 @@ if uploaded:
         if is_match:
             st.success("✅ Headers match!")
             # Show a clickable link to GOOGLE
-            st.markdown("\\mydrive\SharedDataDept\Finyog\UPLOAD")
+            st.markdown("mydrive\SharedDataDept\Finyog\UPLOAD")
         else:
             st.error("❌ Correct your header")
             # Optional: show a quick diff to help fix
