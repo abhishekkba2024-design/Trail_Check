@@ -5,13 +5,11 @@ import streamlit as st
 st.set_page_config(page_title="Excel Header Checker", page_icon="✅", layout="centered")
 st.title("✅ Excel Header Checker")
 
-# ---- Configure your expected headers here ----
 EXPECTED_HEADERS = ["Employ_id", "Name", "Department"]
 
 st.write("**Expected headers (in order):**")
 st.code(EXPECTED_HEADERS)
 
-# Option: choose match mode
 match_mode = st.radio(
     "Match mode",
     ["Exact (case & spaces must match)", "Lenient (ignore case/extra spaces/underscores)"],
@@ -28,7 +26,6 @@ uploaded = st.file_uploader("Upload an Excel file (.xlsx/.xls)", type=["xlsx", "
 
 if uploaded:
     try:
-        # Read first sheet by default (you can expose a sheet selector if needed)
         actual_headers = list((pd.read_excel(uploaded, engine="openpyxl")).columns.astype(str))
 
         st.subheader("Headers found in file")
@@ -47,7 +44,6 @@ if uploaded:
             st.markdown("https://forms.office.com/Pages/ResponsePage.aspx?id=GIKK1zVBJkCjqBzdciO01bNCosI6R5VPnjnHYY4WuWxUNzNKNURZWlJJSVdKSDVITlE2WEwzUExKRy4u")
         else:
             st.error("❌ Correct your header")
-            # Optional: show a quick diff to help fix
             st.markdown("**Differences (position-wise):**")
             max_len = max(len(EXPECTED_HEADERS), len(actual_headers))
             for i in range(max_len):
@@ -59,12 +55,10 @@ if uploaded:
                 ) else "❌"
                 st.write(f"{status} Index {i}: expected **{exp}**, got **{act}**")
 
-            # Also show missing / unexpected (set-wise, ignoring order)
             if match_mode.startswith("Exact"):
                 exp_set = set(EXPECTED_HEADERS)
                 act_set = set(actual_headers)
             else:
-                # map normalized → original to report clearly
                 norm_exp_map = {normalize(h): h for h in EXPECTED_HEADERS}
                 norm_act_map = {normalize(h): h for h in actual_headers}
                 exp_set = set(norm_exp_map.keys())
