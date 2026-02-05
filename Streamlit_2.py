@@ -44,7 +44,6 @@ if uploaded:
 
         if is_match:
             st.success("✅ Headers match!")
-            # Show a clickable link to GOOGLE
             st.markdown("https://forms.office.com/Pages/ResponsePage.aspx?id=GIKK1zVBJkCjqBzdciO01bNCosI6R5VPnjnHYY4WuWxUNzNKNURZWlJJSVdKSDVITlE2WEwzUExKRy4u")
         else:
             st.error("❌ Correct your header")
