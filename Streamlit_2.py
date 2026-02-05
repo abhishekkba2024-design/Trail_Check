@@ -29,8 +29,7 @@ uploaded = st.file_uploader("Upload an Excel file (.xlsx/.xls)", type=["xlsx", "
 if uploaded:
     try:
         # Read first sheet by default (you can expose a sheet selector if needed)
-        df = pd.read_excel(uploaded, engine="openpyxl")
-        actual_headers = list(df.columns.astype(str))
+        actual_headers = list((pd.read_excel(uploaded, engine="openpyxl")).columns.astype(str))
 
         st.subheader("Headers found in file")
         st.code(actual_headers)
