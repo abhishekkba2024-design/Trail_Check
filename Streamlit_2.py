@@ -1,6 +1,14 @@
 import re
 import pandas as pd
 import streamlit as st
+from datetime import datetime
+try:
+    # Python 3.9+ recommended
+    from zoneinfo import ZoneInfo
+    IST = ZoneInfo("Asia/Kolkata")
+except Exception:
+    # Fallback to naive datetime if zoneinfo not available
+    IST = None
 
 st.set_page_config(page_title="Excel Header Checker", page_icon="✅", layout="centered")
 st.title("✅ Excel Header Checker")
@@ -19,13 +27,28 @@ match_mode = st.radio(
 def normalize(h: str) -> str:
     """Lowercase, trim, and collapse underscores/spaces to one space for lenient match."""
     s = str(h).strip().lower()
-    s = re.sub(r"[_\\s]+", " ", s)
+    s = re.sub(r"[_\s]+", " ", s)
     return s
+
+# ----- Date-based link selection (IST) -----
+def get_submission_link() -> str:
+    """
+    If user checks after the 5th of the month (IST), return Google.
+    Else, return Microsoft Forms link.
+    """
+    now = datetime.now(IST) if IST else datetime.now()
+    day = now.day
+    if day > 5:
+        return "https://www.google.com"
+    else:
+        return ("https://forms.office.com/Pages/ResponsePage.aspx"
+                "?id=GIKK1zVBJkCjqBzdciO01bNCosI6R5VPnjnHYY4WuWxUNzNKNURZWlJJSVdKSDVITlE2WEwzUExKRy4u")
 
 uploaded = st.file_uploader("Upload an Excel file (.xlsx/.xls)", type=["xlsx", "xls"])
 
 if uploaded:
     try:
+        # Note: openpyxl cannot read .xls; if you expect .xls, switch engine="xlrd"
         actual_headers = list((pd.read_excel(uploaded, engine="openpyxl")).columns.astype(str))
 
         st.subheader("Headers found in file")
@@ -41,7 +64,9 @@ if uploaded:
 
         if is_match:
             st.success("✅ Headers match!")
-            st.markdown("https://forms.office.com/Pages/ResponsePage.aspx?id=GIKK1zVBJkCjqBzdciO01bNCosI6R5VPnjnHYY4WuWxUNzNKNURZWlJJSVdKSDVITlE2WEwzUExKRy4u")
+            # Show conditional link based on date (IST)
+            link_url = get_submission_link()
+            st.markdown(link_url)
         else:
             st.error("❌ Correct your header")
             st.markdown("**Differences (position-wise):**")
@@ -80,4 +105,3 @@ if uploaded:
         st.error(f"Failed to read Excel: {e}")
 else:
     st.info("Upload an Excel file to begin.")
-
