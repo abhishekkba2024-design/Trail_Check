@@ -1,14 +1,17 @@
 import re
 import pandas as pd
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, timedelta
+
+# Try zoneinfo; fall back to manual IST offset if not available
 try:
-    # Python 3.9+ recommended
     from zoneinfo import ZoneInfo
-    IST = ZoneInfo("Asia/Kolkata")
+    def now_ist() -> datetime:
+        return datetime.now(ZoneInfo("Asia/Kolkata"))
 except Exception:
-    # Fallback to naive datetime if zoneinfo not available
-    IST = None
+    # Robust fallback: use UTC and add +5:30 to avoid server-local time surprises
+    def now_ist() -> datetime:
+        return datetime.utcnow() + timedelta(hours=5, minutes=30)
 
 st.set_page_config(page_title="Excel Header Checker", page_icon="✅", layout="centered")
 st.title("✅ Excel Header Checker")
@@ -30,25 +33,25 @@ def normalize(h: str) -> str:
     s = re.sub(r"[_\s]+", " ", s)
     return s
 
-# ----- Date-based link selection (IST) -----
-def get_submission_link() -> str:
+def get_submission_link() -> tuple[str, str]:
     """
-    If user checks after the 5th of the month (IST), return Google.
+    If today's IST date is after the 5th (i.e., 6..31), return Google.
     Else, return Microsoft Forms link.
+    Returns: (url, label)
     """
-    now = datetime.now(IST) if IST else datetime.now()
-    day = now.day
-    if day > 5:
-        return "https://www.google.com"
+    now = now_ist()
+    if now.day > 5:
+        return "https://www.google.com", "Google"
     else:
         return ("https://forms.office.com/Pages/ResponsePage.aspx"
-                "?id=GIKK1zVBJkCjqBzdciO01bNCosI6R5VPnjnHYY4WuWxUNzNKNURZWlJJSVdKSDVITlE2WEwzUExKRy4u")
+                "?id=GIKK1zVBJkCjqBzdciO01bNCosI6R5VPnjnHYY4WuWxUNzNKNURZWlJJSVdKSDVITlE2WEwzUExKRy4u", 
+                "Microsoft Forms")
 
 uploaded = st.file_uploader("Upload an Excel file (.xlsx/.xls)", type=["xlsx", "xls"])
 
 if uploaded:
     try:
-        # Note: openpyxl cannot read .xls; if you expect .xls, switch engine="xlrd"
+        # You can optionally detect extension and switch engine if you truly need .xls
         actual_headers = list((pd.read_excel(uploaded, engine="openpyxl")).columns.astype(str))
 
         st.subheader("Headers found in file")
@@ -64,9 +67,14 @@ if uploaded:
 
         if is_match:
             st.success("✅ Headers match!")
-            # Show conditional link based on date (IST)
-            link_url = get_submission_link()
+            link_url, link_label = get_submission_link()
             st.markdown(link_url)
+            # Debug/info caption so you can verify the rule that was applied
+            now = now_ist()
+            st.caption(
+                f"Rule applied for {now.strftime('%d-%b-%Y %H:%M')} IST "
+                f"→ Showing **{link_label}** (day={now.day}, condition: day > 5)."
+            )
         else:
             st.error("❌ Correct your header")
             st.markdown("**Differences (position-wise):**")
@@ -105,3 +113,4 @@ if uploaded:
         st.error(f"Failed to read Excel: {e}")
 else:
     st.info("Upload an Excel file to begin.")
+``
