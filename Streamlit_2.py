@@ -3,8 +3,8 @@ import pandas as pd
 import streamlit as st
 
 # -------------------------- Page --------------------------
-st.set_page_config(page_title="Excel Header Checker (Multi-sheet, 4 schemas)", page_icon="✅", layout="centered")
-st.title("✅ Excel Header Checker (Multi-sheet, 4 schemas)")
+st.set_page_config(page_title="Standard & ABC Costing Inputs", page_icon="✅", layout="centered")
+st.title("Standard & ABC Costing Inputs")
 
 st.caption(
     "Upload an Excel file (.xlsx/.xlsm). Each sheet must match one of the 4 allowed schemas. "
@@ -40,7 +40,7 @@ SCHEMAS = {
 # -------------------------- OPTIONS --------------------------
 match_mode = st.radio(
     "Match mode",
-    ["Exact (case & spaces must match)",
+    [
      "Lenient (ignores case/extra spaces/underscores/newlines/quotes/*)"],
     index=1
 )
