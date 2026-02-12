@@ -22,7 +22,7 @@ SCHEMAS = {
         "Part No/\nModel No", "Part Name/\nModel Description", "Gross RM Weight\n(in kg/ Part)", "Broad Model",
         "Engine/TM", "Financial Year", "Month", "OK Volume", "Rejection Volume",
         "OEE/Line Efficiency As per Production", "Remarks ( If Any)",
-    ],  # keep same schemas as your previous version
+    ],
     "Schema 2": [
         "S. No.", "Plant", "Maint Dept Code", "Maint Dept Description", "Cost Centre", "Type", "Shop Coverage*", "Remarks",
     ],
@@ -38,15 +38,8 @@ SCHEMAS = {
 }
 
 # -------------------------- OPTIONS --------------------------
-match_mode = st.radio(
-    "Match mode",
-    [
-     "Lenient (ignores case/extra spaces/underscores/newlines/quotes/*)"],
-    index=1
-)
-single_schema_for_workbook = st.checkbox(
-    "Require that all sheets match the **same** schema", value=False
-)
+# Force Lenient mode only (no UI control)
+MATCH_MODE = "Lenient"
 
 # -------------------------- Utility Functions --------------------------
 def normalize(s: str) -> str:
@@ -68,6 +61,7 @@ def compare_headers(expected, actual, mode: str):
     if actual is None:
         return False, ["❌ Unable to read headers."], set(), set()
 
+    # Only Lenient path will be used
     if mode.startswith("Exact"):
         exp_set = expected
         act_set = actual
@@ -93,7 +87,6 @@ def compare_headers(expected, actual, mode: str):
     )
 
     return is_match, diffs, missing, unexpected
-
 
 def evaluate_sheet(xls, sheet_name, mode):
     actual, err = read_headers(xls, sheet_name)
@@ -157,18 +150,12 @@ if uploaded:
         st.stop()
 
     sheet_results = []
-    schemas_used = set()
 
     for sheet in xls.sheet_names:
-        res = evaluate_sheet(xls, sheet, match_mode)
+        res = evaluate_sheet(xls, sheet, MATCH_MODE)
         sheet_results.append((sheet, res))
-        if res["matched"]:
-            schemas_used.add(res["schema"])
 
     all_pass = all(res["matched"] for _, res in sheet_results)
-
-    if all_pass and single_schema_for_workbook and len(schemas_used) > 1:
-        all_pass = False
 
     st.subheader("Result")
     if all_pass:
@@ -191,6 +178,5 @@ if uploaded:
             if res["unexpected"]:
                 st.info("Unexpected:")
                 st.code(list(res["unexpected"]))
-
 else:
     st.info("Upload an Excel file to begin.")
