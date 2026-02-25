@@ -11,7 +11,7 @@ st.caption(
     "If all sheets match, you will receive the Forms link."
 )
 
-FORMS_LINK = "https://teams.microsoft.com/l/message/19:c2a242b3-473a-4f95-9e39-c7618e16b96c_e5617771-746f-4f52-961c-918dd69a6e75@unq.gbl.spaces/1772019345325?context=%7B%22contextType%22%3A%22chat%22%7D"
+FORMS_LINK = "https://forms.office.com/Pages/ResponsePage.aspx?id=GIKK1zVBJkCjqBzdciO01XF3YeVvdFJPlhyRjdaabnVUMEdGU1A5Q0tMSENaUk00TldTR1VUMU04My4u"
 
 # -------------------------- SCHEMAS --------------------------
 SCHEMAS = {
