@@ -32,7 +32,7 @@ SCHEMAS = {
     ],
     "Schema 4": [
         "S. No.", "Plant", "Process", "Shop", "Line", "Line Type", "Model", "Fuel Type",
-        "Part No /Model No", "Part Name/Model Description", "Annual Capacity as per OEE*",
+        "Part No/ Model No", "Part Name/ Model Description", "Annual Capacity as per OEE*",
         "SMM Per Part**", "Takt Time", "Cycle Time", "OEE Factor (%)",
     ],
 }
