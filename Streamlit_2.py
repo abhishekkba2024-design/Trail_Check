@@ -24,16 +24,16 @@ SCHEMAS = {
         "OEE/Line Efficiency As per Production", "Remarks ( If Any)",
     ],
     "Schema 2": [
-        "S. No.", "Plant", "Maint Dept Code", "Maint Dept Description", "Cost Centre", "Type", "Shop Coverage*", "Remarks",
+        "S. No.", "Plant", "Maint Dept Code", "Maint Dept Description", "Cost Centre", "Type", "Shop Coverage*", "Remarks","Financial Year",
     ],
     "Schema 3": [
-        "S. No.", "Plant", "Process", "Shop Type", "Shop\nCode/Maint Dept", "Shop Description", "Cost Centre",
+        "S. No.", "Plant", "Process", "Shop Type", "Shop Code/Maint Dept", "Shop Description", "Cost Centre",
         "Month", "Activity Category", "Sub Activity*", "Manpower Grade", "Headcount",
     ],
     "Schema 4": [
         "S. No.", "Plant", "Process", "Shop", "Line", "Line Type", "Model", "Fuel Type",
-        "Part No/\nModel No", "Part Name/\nModel Description", "Annual Capacity as per OEE*",
-        "SMM\nPer Part**", "Takt Time", "Cycle Time", "OEE Factor (%)",
+        "Part No /Model No", "Part Name/Model Description", "Annual Capacity as per OEE*",
+        "SMM Per Part**", "Takt Time", "Cycle Time", "OEE Factor (%)",
     ],
 }
 
