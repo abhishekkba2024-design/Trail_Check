@@ -27,7 +27,7 @@ SCHEMAS = {
         "S. No.", "Plant", "Maint Dept Code", "Maint Dept Description", "Cost Centre", "Type", "Shop Coverage*", "Remarks",
     ],
     "Schema 3": [
-        "S. No.", "Plant", "Process", "Shop Type", "Shop Code/Maint Dept", "Shop Description", "Cost Centre",
+        "S. No.", "Plant", "Process", "Shop Type", "Shop Code/Maint Dept", "Shop Description", "Cost Centre","Financial Year"
         "Month", "Activity Category", "Sub Activity*", "Manpower Grade", "Headcount",
     ],
     "Schema 4": [
