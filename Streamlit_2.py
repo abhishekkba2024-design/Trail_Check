@@ -24,7 +24,7 @@ SCHEMAS = {
         "OEE/Line Efficiency As per Production", "Remarks ( If Any)",
     ],
     "Schema 2": [
-        "S. No.", "Plant", "Maint Dept Code", "Maint Dept Description", "Cost Centre", "Type", "Shop Coverage*", "Remarks","Financial Year",
+        "S. No.", "Plant", "Maint Dept Code", "Maint Dept Description", "Cost Centre", "Type", "Shop Coverage*", "Remarks",
     ],
     "Schema 3": [
         "S. No.", "Plant", "Process", "Shop Type", "Shop Code/Maint Dept", "Shop Description", "Cost Centre",
